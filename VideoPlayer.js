@@ -15,7 +15,6 @@ import {
   Text
 } from "react-native";
 import _ from "lodash";
-console.log("salam");
 
 export default class VideoPlayer extends Component {
   constructor(props) {
@@ -918,6 +917,9 @@ export default class VideoPlayer extends Component {
     const seekbarControl = !this.props.disableSeekbar
       ? this.renderSeekbar()
       : this.renderNullControl();
+    const fullscreenControl = !this.props.disableFullscreen
+      ? this.renderFullscreen()
+      : this.renderNullControl();
 
     return (
       <Animated.View
@@ -929,19 +931,28 @@ export default class VideoPlayer extends Component {
           }
         ]}
       >
+        <View
+          style={{
+            alignSelf: "center",
+            justifyContent: "center",
+            height: 480
+          }}
+        >
+          {!this.state.loading ? playPauseControl : null}
+        </View>
         <ImageBackground
           source={require("./assets/img/bottom-vignette.png")}
           style={[styles.controls.column]}
           imageStyle={[styles.controls.vignette]}
         >
-          {seekbarControl}
           <View
             style={[styles.controls.row, styles.controls.bottomControlGroup]}
           >
-            {playPauseControl}
             {this.renderTitle()}
             {timerControl}
+            {fullscreenControl}
           </View>
+          {seekbarControl}
         </ImageBackground>
       </Animated.View>
     );
@@ -1122,7 +1133,7 @@ export default class VideoPlayer extends Component {
           />
           {this.renderSubtitle()}
           {this.renderError()}
-          {this.renderTopControls()}
+          {/* {this.renderTopControls()} */}
           {this.renderLoader()}
           {this.renderBottomControls()}
         </View>
@@ -1221,7 +1232,7 @@ const styles = {
       resizeMode: "stretch"
     },
     control: {
-      padding: 16
+      padding: 8
     },
     text: {
       backgroundColor: "transparent",
@@ -1256,9 +1267,9 @@ const styles = {
     bottomControlGroup: {
       alignSelf: "stretch",
       alignItems: "center",
-      justifyContent: "space-between",
-      marginLeft: 12,
-      marginRight: 12,
+      justifyContent: "flex-end",
+      // marginLeft: 12,
+      // marginRight: 4,
       marginBottom: 0
     },
     volume: {
@@ -1269,7 +1280,7 @@ const styles = {
     },
     playPause: {
       position: "relative",
-      width: 80,
+      // width: 80,
       zIndex: 0
     },
     title: {
@@ -1320,9 +1331,8 @@ const styles = {
   seekbar: StyleSheet.create({
     container: {
       alignSelf: "stretch",
-      height: 28,
-      marginLeft: 20,
-      marginRight: 20
+      height: 30,
+      marginRight: 12
     },
     track: {
       backgroundColor: "#333",
